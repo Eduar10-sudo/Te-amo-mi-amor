@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sistema Solar Floral · Para mi niña hermosa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#ffd54a;
+    --gold-deep:#f5a800;
+    --cream:#fff3c4;
+    --script:'Dancing Script','Segoe Script','Brush Script MT',cursive;
+    --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    background:radial-gradient(ellipse at 50% 55%,#1c1244 0%,#0e0a28 46%,#050414 100%);
+    color:#fff;
+    font-family:var(--serif);
+    -webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;user-select:none;
+  }
+  /* Nebulosa suave detrás de todo */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(38% 30% at 18% 22%,rgba(150,90,220,.16),transparent 70%),
+      radial-gradient(34% 28% at 84% 74%,rgba(255,150,120,.10),transparent 70%),
+      radial-gradient(30% 26% at 78% 16%,rgba(90,120,255,.12),transparent 70%),
+      radial-gradient(40% 32% at 24% 86%,rgba(255,200,80,.08),transparent 70%);
+  }
+
+  /* ───────── Cielo de frases ───────── */
+  #sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .star{
+    position:absolute;white-space:nowrap;
+    font-family:var(--script);font-weight:500;
+    text-shadow:0 0 6px currentColor;
+    transform:translate(-50%,-50%) rotate(var(--r,0deg));
+    opacity:var(--o1,.2);
+    animation:twinkle var(--d,5s) ease-in-out var(--dl,0s) infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:var(--o1,.2);filter:blur(.2px)}
+    50%{opacity:var(--o2,.85);filter:blur(0)}
+  }
+  .shoot{
+    position:absolute;white-space:nowrap;font-family:var(--script);font-size:19px;
+    color:#fff7d0;text-shadow:0 0 10px #ffd54a;opacity:0;
+    transform-origin:left center;
+    animation:shoot 3s ease-out forwards;
+  }
+  .shoot::before{
+    content:"";position:absolute;right:100%;top:55%;width:120px;height:1.5px;
+    background:linear-gradient(90deg,transparent,rgba(255,230,140,.9));
+    transform:translateY(-50%);
+  }
+  @keyframes shoot{
+    0%{opacity:0;transform:rotate(24deg) translateX(0)}
+    12%{opacity:1}
+    100%{opacity:0;transform:rotate(24deg) translateX(78vw)}
+  }
+
+  /* ───────── Encabezado y pista ───────── */
+  .title{
+    position:fixed;z-index:5;left:0;right:0;top:calc(10px + env(safe-area-inset-top,0px));
+    text-align:center;pointer-events:none;
+  }
+  .title h1{
+    font-family:var(--script);font-weight:700;font-size:clamp(24px,4.2vw,36px);line-height:1.1;
+    background:linear-gradient(90deg,#ffe9a0,#ffc93a,#ffe9a0);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 10px rgba(255,200,60,.35));
+  }
+  .title p{font-family:var(--script);font-size:clamp(15px,2.4vw,19px);color:#ffd9e6;opacity:.85;margin-top:2px}
+  .hint{
+    position:fixed;z-index:5;left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    text-align:center;pointer-events:none;font-family:var(--script);font-size:clamp(15px,2.4vw,18px);
+    color:rgba(255,240,200,.78);
+  }
+  .dots{display:block;margin-top:2px;letter-spacing:.35em;font-size:16px}
+  .dot{color:rgba(255,235,170,.22);transition:color .6s,text-shadow .6s,transform .6s;display:inline-block}
+  .dot.on{color:#ffd54a;text-shadow:0 0 10px rgba(255,200,40,.9);transform:scale(1.2)}
+
+  /* ───────── Sistema solar ───────── */
+  .stage{position:fixed;inset:0;z-index:1;display:grid;place-items:center}
+  .system{--s:min(94vw,86vh);position:relative;width:var(--s);height:var(--s)}
+  @supports (height:100dvh){ .system{--s:min(94vw,86dvh)} }
+
+  .orbit{
+    position:absolute;left:50%;top:50%;width:calc(var(--f)*100%);aspect-ratio:1;
+    transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+    border:1px solid rgba(255,225,140,.16);
+    box-shadow:0 0 14px rgba(255,210,90,.05),inset 0 0 14px rgba(255,210,90,.04);
+  }
+
+  /* Bloques compartidos: crecer al pasar + girar sobre sí mismos */
+  .grow{
+    display:block;width:100%;height:100%;
+    transition:transform .4s cubic-bezier(.3,1.6,.5,1),filter .4s ease;
+    filter:drop-shadow(0 0 5px rgba(255,214,80,.55));
+  }
+  .spin{display:block;width:100%;height:100%;animation:spin var(--spin,30s) linear infinite var(--dir,normal)}
+  .spin.sway{animation:sway 5s ease-in-out infinite alternate;transform-origin:50% 88%}
+  .spin svg{display:block;width:100%;height:100%;overflow:visible}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes sway{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+
+  /* Sol */
+  .sun{
+    position:absolute;left:50%;top:50%;width:calc(var(--s)*.21);aspect-ratio:1;
+    transform:translate(-50%,-50%);background:none;border:0;cursor:pointer;z-index:2;outline:none;
+  }
+  .sun-glow{
+    position:absolute;inset:-62%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(255,224,90,.62) 0%,rgba(255,184,0,.26) 34%,rgba(255,150,0,.08) 55%,transparent 70%);
+    animation:pulse 5.5s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(.94);opacity:.85}50%{transform:scale(1.06);opacity:1}}
+  .sun .grow{position:relative;filter:drop-shadow(0 0 16px rgba(255,205,40,.85))}
+  .sun:hover .grow,.sun:focus-visible .grow{transform:scale(1.07);filter:drop-shadow(0 0 26px rgba(255,220,80,1))}
+
+  /* Planetas florales */
+  .planet{
+    position:absolute;left:0;top:0;width:max(34px,calc(var(--s)*var(--sz)));aspect-ratio:1;
+    background:none;border:0;cursor:pointer;z-index:3;will-change:transform;outline:none;
+  }
+  .planet:hover,.planet:focus-visible{z-index:6}
+  .planet:hover .grow,.planet:focus-visible .grow{
+    transform:scale(1.42);
+    filter:drop-shadow(0 0 10px #ffe27a) drop-shadow(0 0 26px rgba(255,200,40,.95));
+  }
+  .label{
+    position:absolute;top:calc(100% + 16px);left:50%;
+    transform:translate(-50%,-4px);opacity:0;pointer-events:none;white-space:nowrap;
+    font-family:var(--script);font-size:17px;color:#ffeaa6;text-shadow:0 0 10px rgba(255,190,40,.8),0 1px 3px #000;
+    transition:opacity .3s,transform .3s;
+  }
+  .planet:hover .label,.planet:focus-visible .label{opacity:1;transform:translate(-50%,0)}
+  .planet.seen::after{
+    content:"♡";position:absolute;right:-6px;top:-8px;font-size:15px;color:#ffb3c7;
+    text-shadow:0 0 8px #ff7aa2;animation:beat 2.2s ease-in-out infinite;pointer-events:none;
+  }
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+
+  /* ───────── Ventana emergente ───────── */
+  .overlay{
+    position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;
+    background:radial-gradient(circle at 50% 38%,rgba(46,28,104,.78),rgba(5,3,18,.93));
+    -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+    opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s;
+  }
+  .overlay.open{opacity:1;visibility:visible}
+  .petals{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .fall{
+    position:absolute;top:0;width:12px;height:16px;border-radius:0 100% 0 100%;opacity:0;
+    background:linear-gradient(135deg,#fff3a0,#f5b800);
+    animation:fall var(--t,9s) linear var(--dl,0s) infinite;
+  }
+  @keyframes fall{
+    0%{transform:translate3d(0,-6vh,0) rotate(0);opacity:0}
+    10%{opacity:.85}
+    90%{opacity:.6}
+    100%{transform:translate3d(var(--dx,40px),106vh,0) rotate(560deg);opacity:0}
+  }
+  .card{
+    position:relative;width:min(560px,100%);border-radius:28px;overflow:hidden;
+    background:linear-gradient(160deg,rgba(40,27,92,.94),rgba(17,11,46,.96));
+    border:1px solid rgba(255,214,90,.5);
+    box-shadow:0 0 0 6px rgba(255,214,90,.06),0 30px 80px rgba(0,0,0,.6),0 0 70px rgba(255,200,40,.2);
+    transform:translateY(26px) scale(.93);
+    transition:transform .6s cubic-bezier(.2,1.25,.3,1);
+  }
+  .overlay.open .card{transform:none}
+  .card::before{
+    content:"";position:absolute;inset:8px;border:1px dashed rgba(255,214,90,.28);
+    border-radius:21px;pointer-events:none;
+  }
+  .scroll{max-height:88vh;overflow-y:auto;padding:38px 34px 30px;text-align:center;-webkit-user-select:text;user-select:text}
+  @supports (height:100dvh){ .scroll{max-height:88dvh} }
+  .card-flower{width:92px;height:92px;margin:0 auto 6px;filter:drop-shadow(0 0 16px rgba(255,205,60,.85))}
+  .card-flower .spin{--spin:40s}
+  .kicker{font-family:var(--script);font-size:19px;color:#ffc9dc}
+  .card h2{
+    font-family:var(--script);font-weight:700;font-size:clamp(30px,6vw,40px);line-height:1.1;margin:2px 0 18px;
+    background:linear-gradient(90deg,#ffe9a0,#ffc93a,#ffe9a0);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stanza{margin-bottom:1.05em}
+  .line{
+    display:block;font-style:italic;font-size:clamp(15px,3.6vw,17.5px);line-height:1.8;color:#fff4d6;
+    opacity:0;transform:translateY(8px);
+  }
+  .overlay.open .line{animation:rise .9s ease forwards;animation-delay:calc(var(--i)*.28s + .35s)}
+  .line.closing{font-style:normal;font-family:var(--script);font-size:clamp(21px,4.6vw,25px);color:#ffe27a;margin-top:6px;line-height:1.35}
+  .line.sign{font-family:var(--script);font-size:19px;color:#ffc9dc;margin-top:12px}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  .close-x{
+    position:absolute;top:14px;right:14px;z-index:2;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,214,90,.08);border:1px solid rgba(255,214,90,.55);color:#ffe27a;
+    font-size:17px;line-height:1;cursor:pointer;transition:transform .35s,background .3s,box-shadow .3s;
+  }
+  .close-x:hover,.close-x:focus-visible{transform:rotate(90deg);background:rgba(255,214,90,.2);box-shadow:0 0 16px rgba(255,205,60,.55);outline:none}
+  .close-btn{
+    margin-top:22px;padding:11px 30px;border:0;border-radius:999px;cursor:pointer;
+    font-family:var(--script);font-weight:700;font-size:21px;color:#3a2500;
+    background:linear-gradient(135deg,#ffe98c,#f5a800);
+    box-shadow:0 6px 22px rgba(245,168,0,.4);transition:transform .25s,box-shadow .25s;
+  }
+  .close-btn:hover,.close-btn:focus-visible{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,200,40,.6);outline:none}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:30;
+    width:min(92vw,460px);text-align:center;padding:14px 22px;border-radius:20px;
+    font-family:var(--script);font-size:clamp(19px,4vw,23px);line-height:1.3;color:#3a2500;
+    background:linear-gradient(135deg,#fff0a8,#ffc93a);box-shadow:0 10px 40px rgba(255,200,40,.45);
+    transform:translate(-50%,30px);opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (prefers-reduced-motion:reduce){
+    .spin,.spin.sway,.sun-glow,.shoot,.fall{animation:none}
+    .star{animation-duration:12s}
+  }
+</style>
+</head>
+<body>
+
+<div id="sky" aria-hidden="true"></div>
+
+<header class="title">
+  <h1>Sistema Solar Floral</h1>
+  <p>para mi niña hermosa ♡</p>
+</header>
+
+<main class="stage">
+  <div class="system" id="system"></div>
+</main>
+
+<footer class="hint">
+  Toca una flor para descubrir su poema… y no olvides el sol
+  <span class="dots" id="dots" aria-live="polite"></span>
+</footer>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="petals" id="petals"></div>
+  <article class="card" role="dialog" aria-modal="true" aria-labelledby="poemTitle">
+    <button class="close-x" id="closeX" type="button" aria-label="Cerrar poema">✕</button>
+    <div class="scroll">
+      <div class="card-flower" id="cardFlower"></div>
+      <p class="kicker" id="poemKicker"></p>
+      <h2 id="poemTitle"></h2>
+      <div id="poemBody"></div>
+      <button class="close-btn" id="closeBtn" type="button">Cerrar y seguir explorando</button>
+    </div>
+  </article>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ══════════════ Utilidades ══════════════ */
+  const $ = s => document.querySelector(s);
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ══════════════ Flores en SVG ══════════════ */
+  let uid = 0;
+  const svg = (defs, body) =>
+    `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${defs}</defs>${body}</svg>`;
+  const assemble = (...parts) => svg(parts.map(p => p.defs || '').join(''), parts.map(p => p.body).join(''));
+
+  // Forma de un pétalo que nace en el centro y llega hasta "len"
+  function petalPath(len, w, inner, round) {
+    const y0 = 50 - inner, yt = 50 - len, L = y0 - yt;
+    if (round) {
+      return `M50 ${y0} C ${50 - w * 1.25} ${y0 - L * .15}, ${50 - w * 1.05} ${yt}, 50 ${yt} ` +
+             `C ${50 + w * 1.05} ${yt}, ${50 + w * 1.25} ${y0 - L * .15}, 50 ${y0} Z`;
+    }
+    return `M50 ${y0} C ${50 - w} ${y0 - L * .3}, ${50 - w * .55} ${yt + L * .25}, 50 ${yt} ` +
+           `C ${50 + w * .55} ${yt + L * .25}, ${50 + w} ${y0 - L * .3}, 50 ${y0} Z`;
+  }
+
+  // Un anillo de pétalos con degradado
+  function ring({ n, len, w, inner = 6, round = false, tip, base, offset = 0,
+                  stroke = 'rgba(130,75,0,.28)', vein = true }) {
+    const id = 'g' + (uid++);
+    const d = petalPath(len, w, inner, round);
+    const defs = `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">` +
+                 `<stop offset="0" stop-color="${tip}"/><stop offset="1" stop-color="${base}"/></linearGradient>`;
+    let body = '';
+    for (let i = 0; i < n; i++) {
+      const a = offset + i * 360 / n;
+      const veinPath = vein
+        ? `<path d="M50 ${50 - inner - 1} L50 ${50 - len + (len - inner) * .28}" stroke="rgba(150,80,0,.3)" stroke-width=".5" fill="none"/>`
+        : '';
+      body += `<g transform="rotate(${a.toFixed(2)} 50 50)"><path d="${d}" fill="url(#${id})" stroke="${stroke}" stroke-width=".5"/>${veinPath}</g>`;
+    }
+    return { defs, body };
+  }
+
+  // Centro con semillas en espiral áurea
+  function disc(r, c1, c2, seed, count, seedR) {
+    const id = 'd' + (uid++);
+    const defs = `<radialGradient id="${id}" cx=".38" cy=".33" r=".8">` +
+                 `<stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient>`;
+    let body = `<circle cx="50" cy="50" r="${r}" fill="url(#${id})" stroke="rgba(255,213,74,.55)" stroke-width=".8"/>`;
+    for (let n = 1; n <= count; n++) {
+      const rr = (r - 2.2) * Math.sqrt(n / count), a = n * 2.399963;
+      body += `<circle cx="${(50 + rr * Math.cos(a)).toFixed(2)}" cy="${(50 + rr * Math.sin(a)).toFixed(2)}" r="${seedR}" fill="${seed}" opacity=".75"/>`;
+    }
+    body += `<ellipse cx="${(50 - r * .3).toFixed(1)}" cy="${(50 - r * .4).toFixed(1)}" rx="${(r * .36).toFixed(1)}" ry="${(r * .2).toFixed(1)}" fill="#fff" opacity=".16" transform="rotate(-30 50 50)"/>`;
+    return { defs, body };
+  }
+
+  // ☀ El Sol: un gran girasol radiante
+  function buildSun() {
+    return assemble(
+      ring({ n: 24, len: 49, w: 6.4, inner: 12, tip: '#ffc400', base: '#ff9800' }),
+      ring({ n: 24, len: 45, w: 6.4, inner: 12, offset: 7.5, tip: '#ffe000', base: '#ffb300' }),
+      ring({ n: 18, len: 38, w: 6, inner: 12, offset: 5, tip: '#fff36b', base: '#ffca00' }),
+      disc(17, '#8a5518', '#3a1f07', '#e0a848', 110, 1.05)
+    );
+  }
+
+  // 1 · Girasol dorado (ámbar profundo)
+  function buildGirasol() {
+    return assemble(
+      ring({ n: 16, len: 48, w: 7.6, inner: 11, tip: '#ffbf00', base: '#f28c00' }),
+      ring({ n: 16, len: 42, w: 7.2, inner: 11, offset: 11.25, tip: '#ffd84a', base: '#ffa800' }),
+      disc(15, '#8a5a1e', '#4a2a0a', '#dcae55', 70, 1)
+    );
+  }
+
+  // 2 · Margarita de miel (limón suave)
+  function buildMargarita() {
+    return assemble(
+      ring({ n: 16, len: 48, w: 4.7, inner: 9, round: true, tip: '#ffe57f', base: '#ffca28' }),
+      ring({ n: 16, len: 42, w: 4.5, inner: 9, round: true, offset: 11.25, tip: '#fffbd0', base: '#ffe082' }),
+      disc(10, '#ffd24a', '#e08a00', '#fff2a8', 34, .8)
+    );
+  }
+
+  // 3 · Rosa ámbar (capas de pétalos)
+  function buildRosa() {
+    const st = 'rgba(140,80,0,.38)';
+    return assemble(
+      ring({ n: 6, len: 48, w: 20, inner: 4, round: true, tip: '#ffe27a', base: '#f2b100', stroke: st, vein: false }),
+      ring({ n: 6, len: 40, w: 17, inner: 3, round: true, offset: 30, tip: '#ffea8f', base: '#f5b800', stroke: st, vein: false }),
+      ring({ n: 5, len: 31, w: 14, inner: 2, round: true, offset: 12, tip: '#fff0a8', base: '#f9c400', stroke: st, vein: false }),
+      ring({ n: 5, len: 22, w: 11, inner: 1, round: true, offset: 40, tip: '#fff6c0', base: '#fbd000', stroke: st, vein: false }),
+      ring({ n: 4, len: 13, w: 8, inner: 0, round: true, offset: 20, tip: '#ffe680', base: '#f0a800', stroke: st, vein: false })
+    );
+  }
+
+  // 4 · Narciso de luz (trompeta dorada)
+  function buildNarciso() {
+    const idT = 'd' + (uid++), idC = 'd' + (uid++);
+    const defs = `<radialGradient id="${idT}" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffd24a"/><stop offset="1" stop-color="#f29d00"/></radialGradient>` +
+                 `<radialGradient id="${idC}" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#b86a00"/><stop offset="1" stop-color="#f7b500"/></radialGradient>`;
+    let body = '';
+    for (let i = 0; i < 12; i++) {
+      const a = i * Math.PI / 6;
+      body += `<circle cx="${(50 + 15.5 * Math.cos(a)).toFixed(2)}" cy="${(50 + 15.5 * Math.sin(a)).toFixed(2)}" r="4.2" fill="url(#${idT})" stroke="#e08e00" stroke-width=".5"/>`;
+    }
+    body += `<circle cx="50" cy="50" r="16" fill="url(#${idT})"/>` +
+            `<circle cx="50" cy="50" r="12.5" fill="url(#${idC})" stroke="#d98800" stroke-width=".6"/>` +
+            `<circle cx="50" cy="50" r="3" fill="#fff3b0"/>`;
+    return assemble(
+      ring({ n: 6, len: 48, w: 14, inner: 8, tip: '#fff59d', base: '#ffd54f' }),
+      ring({ n: 6, len: 44, w: 13, inner: 8, offset: 30, tip: '#fffbc4', base: '#ffe082' }),
+      { defs, body }
+    );
+  }
+
+  // 5 · Botón de oro (capullo a punto de abrir)
+  function buildBoton() {
+    const g1 = 'g' + (uid++), g2 = 'g' + (uid++), g3 = 'g' + (uid++), lf = 'g' + (uid++);
+    const defs =
+      `<linearGradient id="${g1}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd54f"/><stop offset="1" stop-color="#f29d00"/></linearGradient>` +
+      `<linearGradient id="${g2}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff59d"/><stop offset="1" stop-color="#ffc107"/></linearGradient>` +
+      `<linearGradient id="${g3}" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe082"/><stop offset="1" stop-color="#f5a300"/></linearGradient>` +
+      `<linearGradient id="${lf}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aed581"/><stop offset="1" stop-color="#558b2f"/></linearGradient>`;
+    const st = 'stroke="rgba(140,80,0,.35)" stroke-width=".6"';
+    const body =
+      `<path d="M50 88 C 27 84 22 50 50 12 C 78 50 73 84 50 88Z" fill="url(#${g1})" ${st}/>` +
+      `<path d="M50 88 C 24 86 17 56 38 22 C 46 44 50 66 50 88Z" fill="url(#${g2})" ${st}/>` +
+      `<path d="M50 88 C 76 86 83 56 62 22 C 54 44 50 66 50 88Z" fill="url(#${g3})" ${st}/>` +
+      `<path d="M33 42 C 35 52 39 62 42 72" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".38" fill="none"/>` +
+      `<path d="M50 92 C 38 93 26 88 20 76 C 33 75 44 82 50 92Z" fill="url(#${lf})"/>` +
+      `<path d="M50 92 C 62 93 74 88 80 76 C 67 75 56 82 50 92Z" fill="url(#${lf})"/>`;
+    return svg(defs, body);
+  }
+
+  // 6 · Mimosa dorada (pompones)
+  function buildMimosa() {
+    const id = 'p' + (uid++);
+    const defs = `<radialGradient id="${id}" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#fffde7"/><stop offset=".55" stop-color="#ffee58"/><stop offset="1" stop-color="#fbc02d"/></radialGradient>`;
+    const pom = (cx, cy, r, fuzz) => {
+      let s = '';
+      for (let k = 0; k < fuzz; k++) {
+        const a = k * 2 * Math.PI / fuzz;
+        s += `<circle cx="${(cx + r * .96 * Math.cos(a)).toFixed(2)}" cy="${(cy + r * .96 * Math.sin(a)).toFixed(2)}" r="${(r * .17).toFixed(2)}" fill="#fff59d"/>`;
+      }
+      return s + `<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${r}" fill="url(#${id})" stroke="rgba(200,130,0,.3)" stroke-width=".5"/>`;
+    };
+    let body = '';
+    for (let i = 0; i < 6; i++) { const a = (i * 60 + 30) * Math.PI / 180; body += pom(50 + 40 * Math.cos(a), 50 + 40 * Math.sin(a), 6.2, 10); }
+    for (let i = 0; i < 6; i++) { const a = i * 60 * Math.PI / 180;        body += pom(50 + 27 * Math.cos(a), 50 + 27 * Math.sin(a), 12.5, 13); }
+    body += pom(50, 50, 17, 16);
+    return svg(defs, body);
+  }
+
+  /* ══════════════ Poemas y planetas ══════════════ */
+  const PLANETS = [
+    {
+      name: 'Girasol Dorado', kind: 'Primer planeta · Girasol Dorado', title: 'Girasol de mi mañana',
+      build: buildGirasol, orbit: .36, speed: .30, angle: .5, size: .078, spin: '34s', dir: 'normal',
+      stanzas: [
+        ['Cada mañana mi alma se inclina', 'buscando tu luz, como el girasol;', 'tu sonrisa es la aurora divina', 'que viste mi mundo de oro y de sol.'],
+        ['Eres el rumbo de todos mis días,', 'la dulce razón de mi despertar;', 'y aunque la noche se llene de sombras,', 'sé bien hacia dónde mirar.']
+      ],
+      closing: 'Mi niña hermosa: te amo más que ayer y menos que mañana.'
+    },
+    {
+      name: 'Margarita de Miel', kind: 'Segundo planeta · Margarita de Miel', title: 'Bien me quieres',
+      build: buildMargarita, orbit: .48, speed: .22, angle: 2.4, size: .072, spin: '46s', dir: 'reverse',
+      stanzas: [
+        ['Le pregunté a una margarita', 'si me querías, mi princesa;', 'y en vez de deshojarse triste,', 'floreció con más belleza.'],
+        ['Sus pétalos de miel me dijeron', 'lo que mi pecho ya sabía:', 'que no existe el «sí» ni el «no»,', 'solo un «te adoro» cada día.'],
+        ['Y si el mundo me pregunta', 'por qué sonrío sin parar,', 'le diré que tengo una reina', 'que me enseñó a soñar.']
+      ],
+      closing: 'Eres la flor más bonita de todo el jardín del universo.'
+    },
+    {
+      name: 'Rosa Ámbar', kind: 'Tercer planeta · Rosa Ámbar', title: 'Una rosa de oro',
+      build: buildRosa, orbit: .60, speed: .165, angle: 4.1, size: .080, spin: '60s', dir: 'normal',
+      stanzas: [
+        ['Hay rosas rojas para el deseo', 'y blancas para la ilusión,', 'pero yo tejí para ti, mi reina,', 'una rosa de oro con mi corazón.'],
+        ['Cada pétalo guarda un instante:', 'tu voz, tu risa, tu mirar,', 'la forma en que dices mi nombre', 'y me haces querer volar.'],
+        ['Si tuviera que elegir una estrella,', 'un mar o una canción,', 'te elegiría a ti, mil veces,', 'en cada vida, en cada estación.']
+      ],
+      closing: 'Te adoro, hoy, mañana y siempre.'
+    },
+    {
+      name: 'Narciso de Luz', kind: 'Cuarto planeta · Narciso de Luz', title: 'Mi vida entera',
+      build: buildNarciso, orbit: .72, speed: .125, angle: 5.5, size: .084, spin: '50s', dir: 'reverse',
+      stanzas: [
+        ['Narciso dorado que canta al viento', 'con su trompeta de luz y de miel,', 'anuncia a los cielos lo que yo siento:', 'que eres mi vida, mi todo, mi fe.'],
+        ['Antes de ti, mis días eran de invierno,', 'un jardín dormido, sin color;', 'llegaste tú, con tus manos de sol,', 'y despertaste mi corazón.'],
+        ['Ya no sé contar el tiempo sin ti,', 'ni imaginar un mañana sin tu voz;', 'porque eres mi vida, mi niña hermosa,', 'y mi vida es tuya, mi amor.']
+      ],
+      closing: 'Eres mi vida. Y todo lo demás es solo paisaje.'
+    },
+    {
+      name: 'Botón de Oro', kind: 'Quinto planeta · Botón de Oro', title: 'El botón que se abre',
+      build: buildBoton, orbit: .82, speed: .095, angle: 1.3, size: .072, sway: true,
+      stanzas: [
+        ['Todo amor comienza como un botón:', 'pequeño, callado, temblando de luz.', 'Pero el mío, mi niña, creció', 'con cada abrazo, con cada «eres tú».'],
+        ['Y aún guarda pétalos por abrir,', 'mil sueños, mil besos, mil primaveras;', 'porque amarte no tiene final:', 'cada día nace una flor nueva.']
+      ],
+      closing: 'Espérame en cada primavera; yo siempre volveré a ti.'
+    },
+    {
+      name: 'Mimosa Dorada', kind: 'Sexto planeta · Mimosa Dorada', title: 'Mi universo',
+      build: buildMimosa, orbit: .91, speed: .07, angle: 3.6, size: .076, spin: '70s', dir: 'normal',
+      stanzas: [
+        ['Dicen que el universo es infinito,', 'que no tiene principio ni final;', 'yo digo que cabe entero en tus ojos,', 'y allí me quiero quedar.'],
+        ['Mis días giran siempre alrededor de ti,', 'mis noches se encienden con tu nombre;', 'y aunque viajara hasta el último cometa,', 'volvería a ti, mi hogar, mi norte.'],
+        ['Eres mi sol, mi luna y mi cielo,', 'mi estrella más pequeña y mi mayor razón;', 'si el universo tiene un centro,', 'ese centro es tu corazón.']
+      ],
+      closing: 'Eres mi sol. Eres mi universo. Te amo.'
+    }
+  ];
+
+  const SUN_POEM = {
+    name: 'Mi Sol', kind: 'El corazón del sistema', title: 'Mi Sol', build: buildSun,
+    stanzas: [
+      ['Todo gira a tu alrededor, mi sol,', 'las flores, las noches, mi corazón;', 'porque tú eres el centro, el calor, la luz,', 'la razón de mi vida y de mi canción.']
+    ],
+    closing: 'Te amo, mi sol. ☀'
+  };
+
+  /* ══════════════ Cielo de frases ══════════════ */
+  const PHRASES = [
+    'te amo', 'mi niña hermosa', 'mi princesa', 'eres mi vida', 'mi sol', 'te adoro', 'mi reina', 'mi universo',
+    'te amo', 'mi princesa', 'mi sol', 'mi reina', 'te adoro', 'mi cielo', 'mi amor', 'solo tú', 'mi todo'
+  ];
+  const STAR_COLORS = ['#fff6cf', '#ffe9a8', '#ffd1e0', '#e8e4ff', '#ffffff', '#ffe27a'];
+  const sky = $('#sky');
+
+  (function buildSky() {
+    const count = Math.max(48, Math.min(125, Math.round(innerWidth * innerHeight / 15000)));
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < count; i++) {
+      const big = Math.random() < .1;
+      const el = document.createElement('span');
+      el.className = 'star';
+      el.textContent = pick(PHRASES);
+      el.style.cssText =
+        `left:${rand(2, 98).toFixed(1)}%;top:${rand(2, 98).toFixed(1)}%;` +
+        `font-size:${(big ? rand(19, 24) : rand(10, 16)).toFixed(1)}px;color:${pick(STAR_COLORS)};` +
+        `--r:${rand(-22, 22).toFixed(1)}deg;--o1:${(big ? rand(.25, .4) : rand(.08, .28)).toFixed(2)};` +
+        `--o2:${(big ? 1 : rand(.5, .92)).toFixed(2)};--d:${rand(3, 8).toFixed(1)}s;--dl:-${rand(0, 8).toFixed(1)}s`;
+      frag.appendChild(el);
+    }
+    sky.appendChild(frag);
+  })();
+
+  // Una frase que cruza el cielo como estrella fugaz
+  function shootingPhrase() {
+    if (!reduceMotion && !document.hidden) {
+      const el = document.createElement('div');
+      el.className = 'shoot';
+      el.textContent = pick(['te amo', 'mi princesa', 'eres mi vida', 'mi reina', 'te adoro']);
+      el.style.left = rand(-4, 35).toFixed(1) + '%';
+      el.style.top = rand(6, 45).toFixed(1) + '%';
+      sky.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+    setTimeout(shootingPhrase, rand(9000, 17000));
+  }
+  setTimeout(shootingPhrase, 4000);
+
+  /* ══════════════ Construcción del sistema ══════════════ */
+  const system = $('#system');
+  let hovering = false, modalOpen = false;
+
+  PLANETS.forEach(p => {
+    const o = document.createElement('div');
+    o.className = 'orbit';
+    o.style.setProperty('--f', p.orbit);
+    system.appendChild(o);
+  });
+
+  const sun = document.createElement('button');
+  sun.type = 'button';
+  sun.className = 'sun';
+  sun.setAttribute('aria-label', 'El Sol: abrir mensaje secreto');
+  sun.innerHTML = `<span class="sun-glow"></span><span class="grow"><span class="spin" style="--spin:150s">${buildSun()}</span></span>`;
+  system.appendChild(sun);
+
+  PLANETS.forEach(p => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'planet';
+    el.style.setProperty('--sz', p.size);
+    el.setAttribute('aria-label', `${p.name}: abrir poema`);
+    el.innerHTML =
+      `<span class="grow"><span class="spin${p.sway ? ' sway' : ''}" style="--spin:${p.spin || '30s'};--dir:${p.dir || 'normal'}">${p.build()}</span></span>` +
+      `<span class="label">${p.name}</span>`;
+    system.appendChild(el);
+    p.el = el;
+
+    el.addEventListener('click', () => openPoem(p, el, true));
+    el.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { hovering = true; } });
+    el.addEventListener('pointerleave', () => { hovering = false; });
+    el.addEventListener('pointercancel', () => { hovering = false; });
+  });
+  sun.addEventListener('click', () => openPoem(SUN_POEM, sun, false));
+
+  /* ══════════════ Animación orbital ══════════════ */
+  let speed = 1, last = performance.now();
+  const baseScale = reduceMotion ? .35 : 1;
+
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000);
+    last = now;
+    const target = modalOpen ? .15 : hovering ? .05 : 1;   // se frena suavemente para poder tocar una flor
+    speed += (target - speed) * Math.min(1, dt * 4);
+
+    const half = system.clientWidth / 2;
+    for (const p of PLANETS) {
+      p.angle += p.speed * dt * speed * baseScale;
+      const r = p.orbit * half;
+      const x = half + Math.cos(p.angle) * r;
+      const y = half + Math.sin(p.angle) * r;
+      p.el.style.transform = `translate(${x.toFixed(2)}px,${y.toFixed(2)}px) translate(-50%,-50%)`;
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ══════════════ Progreso ══════════════ */
+  const seen = new Set();
+  const dots = $('#dots');
+  dots.innerHTML = PLANETS.map(() => '<span class="dot">✿</span>').join('');
+  let finalShown = false;
+
+  function updateDots() {
+    [...dots.children].forEach((d, i) => d.classList.toggle('on', seen.has(PLANETS[i].name)));
+  }
+
+  const toast = $('#toast');
+  let toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 7000);
+  }
+
+  /* ══════════════ Ventana emergente ══════════════ */
+  const overlay = $('#overlay'), petals = $('#petals'), body = $('#poemBody');
+  const closeX = $('#closeX'), closeBtn = $('#closeBtn');
+  let lastTrigger = null;
+
+  function openPoem(data, trigger, counts) {
+    lastTrigger = trigger;
+    modalOpen = true;
+    hovering = false;
+
+    $('#cardFlower').innerHTML = `<span class="spin" style="display:block;width:100%;height:100%">${data.build()}</span>`;
+    $('#poemKicker').textContent = data.kind;
+    $('#poemTitle').textContent = data.title;
+
+    let i = 0;
+    const stanzas = data.stanzas.map(st =>
+      `<p class="stanza">${st.map(l => `<span class="line" style="--i:${i++}">${l}</span>`).join('')}</p>`
+    ).join('');
+    body.innerHTML = stanzas +
+      `<span class="line closing" style="--i:${i++}">${data.closing}</span>` +
+      `<span class="line sign" style="--i:${i}">Con todo mi amor ♡</span>`;
+    body.parentElement.scrollTop = 0;
+
+    // pétalos que caen dentro de la ventana
+    petals.innerHTML = '';
+    if (!reduceMotion) {
+      for (let k = 0; k < 16; k++) {
+        const f = document.createElement('span');
+        f.className = 'fall';
+        f.style.cssText = `left:${rand(0, 100).toFixed(1)}%;--t:${rand(8, 14).toFixed(1)}s;--dl:-${rand(0, 12).toFixed(1)}s;--dx:${rand(-80, 80).toFixed(0)}px;transform:scale(${rand(.6, 1.3).toFixed(2)})`;
+        petals.appendChild(f);
+      }
+    }
+
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    closeBtn.focus({ preventScroll: true });
+
+    if (counts && !seen.has(data.name)) {
+      seen.add(data.name);
+      trigger.classList.add('seen');
+      updateDots();
+    }
+  }
+
+  function closePoem() {
+    if (!modalOpen) return;
+    modalOpen = false;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    setTimeout(() => { if (!modalOpen) petals.innerHTML = ''; }, 600);
+    if (lastTrigger) lastTrigger.focus({ preventScroll: true });
+
+    if (seen.size === PLANETS.length && !finalShown) {
+      finalShown = true;
+      setTimeout(() => showToast('Encontraste todos los poemas… pero mi amor por ti no cabe en seis. Te amo ♡'), 800);
+    }
+  }
+
+  closeX.addEventListener('click', closePoem);
+  closeBtn.addEventListener('click', closePoem);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePoem(); });
+
+  document.addEventListener('keydown', e => {
+    if (!modalOpen) return;
+    if (e.key === 'Escape') { closePoem(); return; }
+    if (e.key === 'Tab') {                       // mantener el foco dentro de la ventana
+      const items = [closeX, closeBtn];
+      const idx = items.indexOf(document.activeElement);
+      e.preventDefault();
+      items[(idx + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
